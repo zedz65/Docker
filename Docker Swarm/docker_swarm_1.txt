@@ -1,0 +1,78 @@
+DOCKER SWARM NOTES:
+
+
+Docker swarm is a part of docker so no new install.
+WHAT IS DOCKER SWARM ? 
+Container orchestration tool = allows us to "cluster" docker containers to different machines. 
+
+cluster = group of machines working together.
+
+we can replicate containers as many times as you want so many users can use. 
+
+how it works : 
+
+1 master node(or computer/vm) 
+execute commands/service comes from here 
+
+many worker nodes (child nodes?)
+service runs on here
+
+INGRESS
+load balancer
+distribute users to different replicas of your app?
+so less busy container will get more users instead of the busy container.
+
+Doing the Tutorial:
+
+Simple Swarm Setup
+Prerequisites
+1.You will need two machines, ideally on the same network or subnet, which can connect to each other.
+2.Both the machines must have Docker installed on them.
+3.If you are using a cloud service, call one swarm-master and the other swarm-worker
+
+
+installing docker on a new vm command:
+
+curl https://get.docker.com | sudo bash
+
+Initilising the Swarm
+Creating the manager swarm on the main machine
+
+command:
+docker swarm init
+
+This generates a token/key. this token will be used to connect the worker nodes to the master.
+example token: 
+
+docker service create --name nginx --publish 80:80 nginx:latest
+q75jg0ghx2hugtdfbnjje2d9u
+
+simply paste this token into the worker nodes/machines.
+
+TIP: if you loose your token in the master you can retrieve the JOIN command This command will show it you again:
+command: docker swarm join-token worker
+
+next setup the Service in the Master Node:
+
+example is nginx:
+
+# docker service create --name [NAME] --publish [CONTAINER_PORT]:[HOST_PORT] [IMAGE]:[TAG]
+docker service create --name nginx --publish 80:80 nginx:latest
+
+docker service create is the command.
+
+"to check it works we can curl localhost:80 in the vm or click the IP address of each vm.
+the output will be that node is a replica of master running on 2 different IP addresses/vms."
+
+REMOVING THE SWARM SERVICE:
+command : docker service rm nginx
+
+
+
+
+
+
+
+
+
+
