@@ -1,4 +1,6 @@
-sql using my app
+STEPS...
+
+Sql using my app
 
 1. clone your project from git
 
@@ -13,7 +15,11 @@ sudo apt install python3
 virtualenv -p python3 venv
 source venv/bin/activate
 
-pip install -r requirements.txt
+6.pip install -r requirements.txt
+
+
+----------------------------------------------------------------
+--DOCKERFILE--
 
 Docker file in directory	|	vim Dockerfile
 
@@ -24,6 +30,25 @@ RUN pip install -r requirements.txt
 COPY . .
 ENTRYPOINT ["/usr/local/bin/python", "app.py"]
 
+----------------------------------------------------------------
+--SQL CONTAINER--
+
+TODO IN SQL CONTAINER:
+docker exec -it mysql bash 	|     after mysql is running  - -  GOES INTO SQL CONTAINER
+
+mysql -u root -p :LOGIN
+
+CREATE THE DATABASE THAT YOU NAMED:
+create database flask
+
+use it USE flask:
+
+----------------------------------------------------------------
+--PYTHON CREATE.PY--
+THEN RUN python3 create.py
+
+----------------------------------------------------------------
+--BUILD IMAGE FROM DOCKERFILE--
 
 next step build image.
 docker build -t "image name" . 	|	docker build -t flaskapp .
@@ -40,6 +65,10 @@ DISPLAYS:
 REPOSITORY                          TAG                 IMAGE ID            CREATED              SIZE
 flaskapp                            latest              8bbaeff4f65c        About a minute ago   971MB
 
+
+---------------------------------------------------------------
+--DOCKER NETWORK--
+
 Next Step Create network:
 command : 
 docker network create "network name"
@@ -51,6 +80,10 @@ DISPLAYS:
 
 here we put both containers in so they can communicate with each other
 sql and flask
+
+
+----------------------------------------------------------------
+--SQL CONTAINER ATTATCHED--
 
 COMMAND ATTATCHING CONTAINERS
 docker run -d -p 3306:3306 --network flaskapp -e MYSQL_ROOT_PASSWORD=zahid65 -e MYSQLDATABASE=flask -v sqlflask:/var/lib/mysql --name mysql mysql:5.7
@@ -69,9 +102,11 @@ DISPLAY:
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                               NAMES
 b6ab880b8396        mysql:5.7           "docker-entrypoint.s…"   14 minutes ago      Up 14 minutes       0.0.0.0:3306->3306/tcp, 33060/tcp   mysql
 
+-----------------------------------------------------------------
+--FLASK APP CONTAINER ATTATCHED--
 
 COMMAND TO ADD THE FLASK APP CONTAINER:
-docker run -d -p 5000:5000 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KEY=ABC123 --name flaskapp flaskapp
+docker run -d -p 5000:3306 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KEY=ABC123 --name flaskapp flaskapp
 										refers directly to container as they share the same network
 										when using computer locally you leave this as is but export localhost:3306
 
@@ -85,10 +120,16 @@ b6ab880b8396        mysql:5.7           "docker-entrypoint.s…"   2 hours ago  
 
 both are running here.
 
+----------------------------------------------------------------
 
-you can remove sql container and then re add it will include the data from volume
+**if problems check logs
 
 
+***you can remove sql container and then re add it will include the data from volume
+
+
+----------------------------------------------------------------
+--CLEAN-UP REMOVING EVERYTHING--
 
 removing everything:
 docker stop mysql = stop it first
@@ -105,6 +146,42 @@ remove all volumes
 
 docker rmi flaskapp = removes image
 
+------------------------------------------------------------------
+TASK COMPLETE. RUN YOUR APP AND SQL IN 2 CONTAINERS ON A NETWORK.
+------------------------------------------------------------------
 
 
+--ERRORS FACED--
+
+ERROR LOG
+(venv) zedz65@docker:~/myproject$ docker logs flaskapp
+ * Serving Flask app "application" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+/usr/local/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:835: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the futu
+re.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+ * Running on http://0.0.0.0:3306/ (Press CTRL+C to quit)
+ * Restarting with stat
+/usr/local/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py:835: FSADeprecationWarning: SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and will be disabled by default in the futu
+re.  Set it to True or False to suppress this warning.
+  'SQLALCHEMY_TRACK_MODIFICATIONS adds significant overhead and '
+ * Debugger is active!
+ * Debugger PIN: 184-238-265
+
+
+
+
+--------------------------
+--SOLUTION--
+RUNNING ON PORT 3306 INSTEAD OF 5000. NOT SURE WHY?
+
+Solution was to map the port to 3306 instead of 5000. solution below
+							^^^^
+(venv) zedz65@docker:~/myproject$ docker run -d -p 5000:3306 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KEY=ABC123 --name flaskapp flaskapp
+654309370c819d4040c9b62a88de2de9f331b60906916a2dd3c0eac2e7cf80a4
+
+--------------------------
 
