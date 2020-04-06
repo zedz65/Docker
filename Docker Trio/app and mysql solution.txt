@@ -68,7 +68,9 @@ b6ab880b8396        mysql:5.7           "docker-entrypoint.s…"   14 minutes ag
 
 
 COMMAND TO ADD THE FLASK APP CONTAINER:
-docker run -d -p 5000:5000 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/myprojectdb -e SECRET_KET=ABC123 --name flaskapp flaskapp
+docker run -d -p 5000:5000 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KET=ABC123 --name flaskapp flaskapp
+										refers directly to container as they share the same network
+										when using computer locally you leave this as is but export localhost:3306
 
 DISPLAY:
 (venv) zedz65@docker:~/myproject$ docker ps
