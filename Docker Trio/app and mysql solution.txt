@@ -1,4 +1,4 @@
-trio task using my app
+sql using my app
 
 1. clone your project from git
 
@@ -10,7 +10,10 @@ sudo apt install python3
 4.sudo apt-get install python3-pip
 
 5. sudo pip3 install virtualenv 
+virtualenv -p python3 venv
+source venv/bin/activate
 
+pip install -r requirements.txt
 
 Docker file in directory	|	vim Dockerfile
 
@@ -68,7 +71,7 @@ b6ab880b8396        mysql:5.7           "docker-entrypoint.s…"   14 minutes ag
 
 
 COMMAND TO ADD THE FLASK APP CONTAINER:
-docker run -d -p 5000:5000 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KET=ABC123 --name flaskapp flaskapp
+docker run -d -p 5000:5000 --network flaskapp -e DATABASE_URI=mysql+pymysql://root:zahid65@mysql:3306/flask -e SECRET_KEY=ABC123 --name flaskapp flaskapp
 										refers directly to container as they share the same network
 										when using computer locally you leave this as is but export localhost:3306
 
@@ -97,7 +100,7 @@ stop all
 docker rm $(docker ps -qa)
 remove all
 
-docker system prunve -f --volumes
+docker system prune -f --volumes
 remove all volumes
 
 docker rmi flaskapp = removes image
