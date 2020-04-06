@@ -1,0 +1,25 @@
+DOCKER SWARM CLI
+COMMAND LINE INTERFACE
+
+Cli for swarm is built into docker so no need to install or add on.
+
+CLi is used for managing all aspects of Swarm including NODES AND SERVICES.
+
+
+commands to use in docker swarm cli:
+
+What are services????
+
+Services are how we recognise applications and workloads that are running in the Swarm cluster.
+Services can be replicated and spread across multiple nodes for high availability.
+
+
+
+docker file instructions
+
+networking
+
+volumes 
+
+
+
